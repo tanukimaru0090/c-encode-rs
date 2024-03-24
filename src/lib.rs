@@ -1,4 +1,3 @@
-
 extern crate encoding_rs as encode;
 
 use self::encode::SHIFT_JIS;
@@ -18,12 +17,12 @@ pub trait ToEncode {
     fn to_cstring(&self) -> CString;
     //fn to_tchar(&self) ->;
 }
-impl AsEncode for [i8]{
-    fn as_str(&self)->String{
-        unsafe{
+impl AsEncode for [i8] {
+    fn as_str(&self) -> String {
+        unsafe {
             let mut cstr = std::ffi::CStr::from_ptr(self.as_ptr());
             let mut string = cstr.to_str().unwrap().to_string();
-            return string;
+            string
         }
     }
 }
@@ -32,7 +31,7 @@ impl AsEncode for CString {
         unsafe {
             let mut cstr = std::ffi::CStr::from_ptr(self.as_ptr());
             let mut string = cstr.to_str().unwrap().to_string();
-            return string;
+            string
         }
     }
 }
@@ -41,11 +40,11 @@ impl ToEncode for &str {
     fn to_shiftjis(&self) -> CString {
         let (res, _enc, errors) = SHIFT_JIS.encode(self);
         let mut string = CString::new(res).unwrap();
-        return string;
+        string
     }
     // &strをデフォルトのUTF-8のエンコーディングとして変換し、CStringを返す
     fn to_cstring(&self) -> CString {
-        return CString::new(self.as_bytes()).unwrap();
+        CString::new(self.as_bytes()).unwrap()
     }
 }
 impl ToEncode for String {
@@ -53,20 +52,30 @@ impl ToEncode for String {
     fn to_shiftjis(&self) -> CString {
         let (res, _enc, errors) = SHIFT_JIS.encode(&self);
         let mut string = CString::new(res).unwrap();
-        return string;
+        string
     }
     // StringをデフォルトのUTF-8のエンコーディングとして変換し、CStringを返す
     fn to_cstring(&self) -> CString {
-        return CString::new(self.clone().into_bytes()).unwrap();
+        CString::new(self.clone().into_bytes()).unwrap()
     }
 }
-
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    extern "C" {
+        fn printf(format: *const libc::c_char, ...) -> libc::c_int;
+    }
     #[test]
-    fn test(){
-
+    fn test() {
+        unsafe {
+            let mes = "hello world!".to_cstring();
+            printf("%s\n".to_cstring().as_ptr(), mes.as_ptr());
+            // Japanise UTF8
+            {
+                let mes = "ハロー ワールド!".to_cstring();
+                printf("%s\n".to_cstring().as_ptr(), mes.as_ptr());
+            }
+        }
     }
 }

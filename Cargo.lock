@@ -7,6 +7,7 @@ name = "c-encode"
 version = "0.1.0"
 dependencies = [
  "encoding_rs",
+ "libc",
 ]
 
 [[package]]
@@ -23,3 +24,9 @@ checksum = "7268b386296a025e474d5140678f75d6de9493ae55a5d709eeb9dd08149945e1"
 dependencies = [
  "cfg-if",
 ]
+
+[[package]]
+name = "libc"
+version = "0.2.153"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
