@@ -83,7 +83,7 @@ mod tests {
     fn test() {
         unsafe {
             let mut s = String::from("");
-            
+        
             let mut fp: *mut FILE =
                 fopen("test.txt".to_cstring().as_ptr(), "r".to_cstring().as_ptr());
             if fp.is_null() {
